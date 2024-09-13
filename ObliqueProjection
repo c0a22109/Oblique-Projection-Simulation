@@ -1,0 +1,43 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.animation as animation
+from matplotlib import rc, gridspec
+
+x0 = 0
+y0 = 0
+theta = np.radians(30)
+g = 9.8
+v0 = 10
+t_data = []
+v_data = []
+y_data = []
+x_data = []
+ims = []
+
+fig = plt.figure()
+gs = gridspec.GridSpec(2, 1)
+ax = [plt.subplot(gs[0, 0]), plt.subplot(gs[1, 0])]
+ax[1].set_xlim(0, 1)
+
+plt.close()
+
+for t in np.arange(0, 1, 0.05):
+    im = []
+    vx = v0*np.cos(theta)
+    vy = v0*np.sin(theta) - g*t
+    x = vx * t
+    y = (v0*t*np.sin(theta)) - (0.5*g*(t**2)) + y0
+    v = np.sqrt(vx**2 + vy**2)
+    y_data.append(y)
+    x_data.append(x)
+    v_data.append(v)
+    t_data.append(t)
+    im += [ax[0].scatter(x, y, color = "r")]
+    im += ax[1].plot(t_data, v_data, color = "b")
+    ims.append(im)
+
+ani = animation.ArtistAnimation(fig, ims, interval = 500)
+
+rc('animation', html='jshtml')
+ani
